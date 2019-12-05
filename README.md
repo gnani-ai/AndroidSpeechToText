@@ -1,11 +1,11 @@
 # SpeechtoText
 
-Add certificate for TLS :
+# Add certificate for TLS :
 
 1) Add a new android resource raw directory inside res directory
 2) Copy and paste the "cert.pem" file inside raw directory
 
-Add Netwrok Security for TLS :
+# Add Netwrok Security for TLS :
 
 1) Add a new android resource xml directory inside res directory
 2) Add a new xml resource file inside xml directory and name it as "network_security_config.xml"
@@ -20,12 +20,12 @@ Add Netwrok Security for TLS :
     </domain-config>
 </network-security-config>
 
-Enable TLS in Manifest :
+# Enable TLS in Manifest :
 1) Copy and paste the following code in application tag inside "AndroidManifest.xml"
 
 android:networkSecurityConfig="@xml/network_security_config"
 
-Permissions :
+# Permissions :
 1) Copy and paste the following code above application tag inside "AndroidManifest.xml"
 
 <uses-permission android:name="android.permission.INTERNET"/>
@@ -33,7 +33,7 @@ Permissions :
 
 2) Write your own code to ask these permissions at runtime
 
-build.gradle(Project) :
+# build.gradle(Project) :
 1) Copy and paste the following code in dependencies inside build.gradle(Project)
 
 classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
@@ -42,7 +42,7 @@ classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
 
 maven { url 'https://jitpack.io' }
 
-build.gradle(Module) :
+# build.gradle(Module) :
 1) Add the following code in every buildType
 
 buildConfigField("String", "token", project.properties['token'])
@@ -59,12 +59,12 @@ buildConfigField("boolean", "tls", project.properties['tls'])
 
 implementation 'com.github.gnani-ai:SpeechToText:1.0.2'
 
-Service Declaration :
+ # Service Declaration :
 1) Add the following code in application tag inside "AndroidManifest.xml"
 
 <service android:name="com.gnani.stt.SpeechService" />
 
-gradle.properties :
+# gradle.properties :
 1) Add the following properties in gradle.properties
 
 token="yourToken"
@@ -77,7 +77,7 @@ ip="asr.gnani.ai"
 port=443
 tls=true
 
-Java code :
+# Java code :
 1) Implement these two intefaces to your activity or fragment or service
 
 SpeechService.Listener, Recorder.RecordingStatusListener
