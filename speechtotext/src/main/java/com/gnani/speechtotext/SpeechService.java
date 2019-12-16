@@ -34,10 +34,11 @@ public class SpeechService extends Service {
          * @param isFinal {@code true} when the API finished processing audio.
          */
         void onSpeechRecognized(String text, String asr, boolean isFinal);
+        void onError(Throwable t);
     }
 
     private static final String TAG = "SpeechService";
-    private final SpeechService.SpeechBinder mBinder = new SpeechService.SpeechBinder();
+    private final SpeechBinder mBinder = new SpeechBinder();
     private final ArrayList<Listener> mListeners = new ArrayList<>();
     private ListenerGrpc.ListenerStub mApiG;
     private ManagedChannel channelG;
@@ -51,7 +52,7 @@ public class SpeechService extends Service {
             String asr = response.getAsr();
 
             if (transcript != null) {
-                for (SpeechService.Listener listener : mListeners) {
+                for (Listener listener : mListeners) {
 
                     listener.onSpeechRecognized(transcript, asr, true);
 
@@ -62,8 +63,8 @@ public class SpeechService extends Service {
         @Override
         public void onError(Throwable t) {
 
-            for (SpeechService.Listener listener : mListeners) {
-                listener.onSpeechRecognized(null, null, false);
+            for (Listener listener : mListeners) {
+                listener.onError(t);
             }
 
         }
@@ -78,7 +79,7 @@ public class SpeechService extends Service {
     private StreamObserver<SpeechChunk> mRequestObserverG;
 
     public static SpeechService from(IBinder binder) {
-        return ((SpeechService.SpeechBinder) binder).getService();
+        return ((SpeechBinder) binder).getService();
     }
 
     @Override
@@ -111,7 +112,7 @@ public class SpeechService extends Service {
             mApiG = MetadataUtils.attachHeaders(mApiG, header);
         } catch (Exception e) {
 
-            for (SpeechService.Listener listener : mListeners) {
+            for (Listener listener : mListeners) {
                 listener.onSpeechRecognized(null, null, false);
             }
         }
@@ -139,11 +140,11 @@ public class SpeechService extends Service {
         return mBinder;
     }
 
-    public void addListener(@NonNull SpeechService.Listener listener) {
+    public void addListener(@NonNull Listener listener) {
         mListeners.add(listener);
     }
 
-    public void removeListener(@NonNull SpeechService.Listener listener) {
+    public void removeListener(@NonNull Listener listener) {
         mListeners.remove(listener);
     }
 

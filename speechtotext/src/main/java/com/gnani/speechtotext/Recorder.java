@@ -12,32 +12,32 @@ import android.os.IBinder;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 
-public class Recorder {
+class Recorder {
 
-    public static SpeechService mSpeechService;
-    public static boolean mStartRecording = false;
-    public static final int RECORDER_SAMPLERATE = 16000;
-    public static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
-    public static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
-
-    public static AudioRecord recorder = null;
-    public static int bufferSize = AudioRecord.getMinBufferSize(RECORDER_SAMPLERATE,
+    private static SpeechService mSpeechService;
+    private static boolean mStartRecording = false;
+    private static final int RECORDER_SAMPLERATE = 16000;
+    private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
+    private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
+    private static AudioRecord recorder = null;
+    private static int bufferSize = AudioRecord.getMinBufferSize(RECORDER_SAMPLERATE,
             RECORDER_CHANNELS, RECORDER_AUDIO_ENCODING);
-    //public static boolean isRecording = false;
-    public static Thread recordingThread = null;
-    public static SpeechService.Listener listener;
-    public static Recorder.RecordingStatusListener listener1;
-    public static CountDownTimer countDownTimer;
+    private static Thread recordingThread = null;
+    private static SpeechService.Listener listener;
+    private static RecordingStatusListener listener1;
+    private static CountDownTimer countDownTimer;
+    private static String TOKEN = null;
+    private static String ACCESS_KEY = null;
 
-    public static void bind(Context context, SpeechService.Listener speechServiceListener, Recorder.RecordingStatusListener recordingStatusListener) {
+    static void bind(Context context) {
 
-        listener = speechServiceListener;
-        listener1 = recordingStatusListener;
+        listener = (SpeechService.Listener) context;
+        listener1 = (RecordingStatusListener) context;
         context.bindService(new Intent(context, SpeechService.class), mServiceConnection, BIND_AUTO_CREATE);
 
     }
 
-    public static void unbind(Context context) {
+    static void unbind(Context context) {
         mSpeechService.removeListener(mSpeechServiceListener);
         context.unbindService(mServiceConnection);
         mSpeechService = null;
@@ -45,10 +45,10 @@ public class Recorder {
         stopCounter();
     }
 
-    public static void onRecord(String token, String lang, String akey, String audioFormat, String encoding, String sad, String ip, int port, boolean tls) {
+    static void onRecord(String lang) {
 
         if (!mStartRecording) {
-            mSpeechService.startRecognizing(token, lang, akey, audioFormat, encoding, sad, ip, port, tls);
+            mSpeechService.startRecognizing(TOKEN, lang, ACCESS_KEY, "wav", "pcm16", "yes", "asr.gnani.ai", 443, true);
             startRecording();
 
         } else {
@@ -56,7 +56,7 @@ public class Recorder {
         }
     }
 
-    public static void startRecording() {
+    private static void startRecording() {
         recorder = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION,
                 RECORDER_SAMPLERATE,
                 RECORDER_CHANNELS,
@@ -77,7 +77,7 @@ public class Recorder {
         recordingThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                byte data[] = new byte[bufferSize];
+                byte[] data = new byte[bufferSize];
                 int read = 0;
                 while (mStartRecording) {
 
@@ -102,7 +102,7 @@ public class Recorder {
     }
 
 
-    public static void stopRecording() {
+    private static void stopRecording() {
         if (recorder != null) {
 
             int i = recorder.getState();
@@ -122,7 +122,7 @@ public class Recorder {
 
     }
 
-    public static final ServiceConnection mServiceConnection = new ServiceConnection() {
+    private static final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder binder) {
@@ -137,7 +137,7 @@ public class Recorder {
 
     };
 
-    public static final SpeechService.Listener mSpeechServiceListener =
+    private static final SpeechService.Listener mSpeechServiceListener =
             new SpeechService.Listener() {
                 @Override
                 public void onSpeechRecognized(final String text, final String asr, final boolean isFinal) {
@@ -152,10 +152,14 @@ public class Recorder {
                             listener.onSpeechRecognized(text, asr, isFinal);
 
                         }
-                    } else if (text == null && !isFinal) {
-                        stopCounter();
-                        listener.onSpeechRecognized(text, asr, isFinal);
                     }
+                }
+
+                @Override
+                public void onError(Throwable t) {
+
+                    listener.onError(t);
+
                 }
 
             };
@@ -171,7 +175,7 @@ public class Recorder {
         void onRecordingStatus(boolean status);
     }
 
-    public static void startCounter() {
+    private static void startCounter() {
 
         countDownTimer = new CountDownTimer(16000, 1000) {
 
@@ -185,7 +189,7 @@ public class Recorder {
         }.start();
     }
 
-    public static void stopCounter() {
+    private static void stopCounter() {
 
         if (countDownTimer != null) {
             countDownTimer.cancel();
@@ -195,6 +199,13 @@ public class Recorder {
             mSpeechService.finishRecognizing();
         }
         stopRecording();
+    }
+
+    static void init(String token, String accessKey) {
+
+        TOKEN = token;
+        ACCESS_KEY = accessKey;
+
     }
 
 }
