@@ -43,52 +43,31 @@ classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
 maven { url 'https://jitpack.io' }
 
 # build.gradle(Module) :
-1) Add the following code in every buildType
+1) Add the following dependency in dependencies inside build.gradle(Module)
 
-buildConfigField("String", "token", project.properties['token'])
-buildConfigField "String", "language", project.properties['language']
-buildConfigField "String", "accesskey", project.properties['accesskey']
-buildConfigField "String", "audioformat", project.properties['audioformat']
-buildConfigField "String", "encoding", project.properties['encoding']
-buildConfigField "String", "sad", project.properties['sad']
-buildConfigField "String", "ip", project.properties['ip']
-buildConfigField("int", "port", project.properties['port'])
-buildConfigField("boolean", "tls", project.properties['tls'])
-
-2) Add the following dependency in dependencies inside build.gradle(Module)
-
-implementation 'com.github.gnani-ai:SpeechToText:1.0.2'
+implementation 'com.github.gnani-ai:SpeechToText:1.0.3'
 
  # Service Declaration :
 1) Add the following code in application tag inside "AndroidManifest.xml"
 
-<service android:name="com.gnani.stt.SpeechService" />
-
-# gradle.properties :
-1) Add the following properties in gradle.properties
-
-token="yourToken"
-language="eng_IN"
-accesskey="yourAccessKey"
-audioformat="wav"
-encoding="pcm16"
-sad="yes"
-ip="asr.gnani.ai"
-port=443
-tls=true
+ <service android:name="com.gnani.speechtotext.SpeechService"/>
 
 # Java code :
+1) Add the following code in Application class of your project
+
+Recorder.init("yourToken", "yourAccessKey");
+
 1) Implement these two intefaces to your activity or fragment or service
 
 SpeechService.Listener, Recorder.RecordingStatusListener
 
 2) Add the following code in onCreate method 
 
-Recorder.bind(yourContext, yourContext, yourContext);
+Recorder.bind(yourContext);
 
 3) Add the following code in clicklisetner of view with which you want to start the recording
 
-Recorder.onRecord(BuildConfig.token, BuildConfig.language, BuildConfig.accesskey, BuildConfig.audioformat, BuildConfig.encoding, BuildConfig.sad, BuildConfig.ip, BuildConfig.port, BuildConfig.tls);
+Recorder.onRecord(yourLanguage);
 
 4) Recording will be stopeed in two cases :
 
