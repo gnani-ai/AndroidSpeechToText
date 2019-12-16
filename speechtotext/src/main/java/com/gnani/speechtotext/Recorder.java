@@ -158,6 +158,7 @@ class Recorder {
                 @Override
                 public void onError(Throwable t) {
 
+                    stopCounter();
                     listener.onError(t);
 
                 }
