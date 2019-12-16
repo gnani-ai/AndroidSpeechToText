@@ -21,16 +21,6 @@ android {
 
             debuggable true
 
-            buildConfigField("String", "token", project.properties['token'])
-            buildConfigField "String", "language", project.properties['language']
-            buildConfigField "String", "accesskey", project.properties['accesskey']
-            buildConfigField "String", "audioformat", project.properties['audioformat']
-            buildConfigField "String", "encoding", project.properties['encoding']
-            buildConfigField "String", "sad", project.properties['sad']
-            buildConfigField "String", "ip", project.properties['ip']
-            buildConfigField("int", "port", project.properties['port'])
-            buildConfigField("boolean", "tls", project.properties['tls'])
-
         }
     }
 }
@@ -43,6 +33,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation 'com.github.gnani-ai:SpeechToText:1.0.2'
+//    implementation 'com.github.gnani-ai:SpeechtoText:1.0.1'
 
 }
