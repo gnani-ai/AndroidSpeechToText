@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SpeechService.Listener, Recorder.RecordingStatusListener {
 
     private Button btnS;
     private TextView txtT;
@@ -21,12 +21,64 @@ public class MainActivity extends AppCompatActivity {
         btnS = findViewById(R.id.btnS);
         txtT = findViewById(R.id.txtT);
 
+        Recorder.bind(MainActivity.this);
+
         btnS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                Recorder.onRecord("hin_IN");
+            }
+        });
+    }
+
+    @Override
+    public void onRecordingStatus(final boolean status) {
+
+        Log.e("STATUS", " " + status);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (status) {
+                    btnS.setText("STOP");
+                } else {
+                    btnS.setText("START");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onSpeechRecognized(final String text, String asr, boolean isFinal) {
+
+        Log.e("text", " " + text);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                txtT.setText(text);
 
             }
         });
+
+    }
+
+    @Override
+    public void onError(Throwable t) {
+        Log.e("on_ERROR", " " + t);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                btnS.setText("START");
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Recorder.unbind(MainActivity.this);
     }
 }
