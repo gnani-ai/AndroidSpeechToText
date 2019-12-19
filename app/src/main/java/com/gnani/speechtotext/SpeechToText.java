@@ -8,6 +8,6 @@ public class SpeechToText extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Recorder.init("yourToken", "yourAccessKey");
+        Recorder.init("token", "accessKey");
     }
 }

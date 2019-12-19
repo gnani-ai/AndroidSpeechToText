@@ -12,7 +12,7 @@ import android.os.IBinder;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 
-class Recorder {
+public class Recorder {
 
     private static SpeechService mSpeechService;
     private static boolean mStartRecording = false;
