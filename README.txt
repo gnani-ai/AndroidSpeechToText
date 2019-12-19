@@ -45,7 +45,7 @@ maven { url 'https://jitpack.io' }
 # build.gradle(Module) :
 1) Add the following dependency in dependencies inside build.gradle(Module)
 
-implementation 'com.github.gnani-ai:SpeechToText:1.0.3'
+implementation 'com.github.gnani-ai:SpeechToText:1.0.5'
 
  # Service Declaration :
 1) Add the following code in application tag inside "AndroidManifest.xml"
