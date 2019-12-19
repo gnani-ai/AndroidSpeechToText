@@ -29,7 +29,7 @@ public class Recorder {
     private static String TOKEN = null;
     private static String ACCESS_KEY = null;
 
-    static void bind(Context context) {
+    public static void bind(Context context) {
 
         listener = (SpeechService.Listener) context;
         listener1 = (RecordingStatusListener) context;
@@ -37,7 +37,7 @@ public class Recorder {
 
     }
 
-    static void unbind(Context context) {
+    public static void unbind(Context context) {
         mSpeechService.removeListener(mSpeechServiceListener);
         context.unbindService(mServiceConnection);
         mSpeechService = null;
@@ -45,7 +45,7 @@ public class Recorder {
         stopCounter();
     }
 
-    static void onRecord(String lang) {
+    public static void onRecord(String lang) {
 
         if (!mStartRecording) {
             mSpeechService.startRecognizing(TOKEN, lang, ACCESS_KEY, "wav", "pcm16", "yes", "asr.gnani.ai", 443, true);
@@ -202,7 +202,7 @@ public class Recorder {
         stopRecording();
     }
 
-    static void init(String token, String accessKey) {
+    public static void init(String token, String accessKey) {
 
         TOKEN = token;
         ACCESS_KEY = accessKey;
