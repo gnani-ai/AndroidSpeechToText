@@ -48,7 +48,7 @@ public class Recorder {
     public static void onRecord(String lang) {
 
         if (!mStartRecording) {
-            mSpeechService.startRecognizing(TOKEN, lang, ACCESS_KEY, "wav", "pcm16", "yes", "asr.gnani.ai", 443, true);
+            mSpeechService.startRecognizing(TOKEN, lang, ACCESS_KEY, mSpeechService.getString(R.string.audio_format_value), mSpeechService.getString(R.string.encoding_value), mSpeechService.getString(R.string.sad_value), mSpeechService.getString(R.string.stt_api_value), mSpeechService.getResources().getInteger(R.integer.stt_api_port_value), mSpeechService.getResources().getBoolean(R.bool.tls_value));
             startRecording();
 
         } else {
@@ -143,10 +143,10 @@ public class Recorder {
                 public void onSpeechRecognized(final String text, final String asr, final boolean isFinal) {
 
                     if (asr != null) {
-                        if (asr.equalsIgnoreCase("gnani")) {
+                        if (asr.equalsIgnoreCase(mSpeechService.getString(R.string.gnani))) {
                             listener.onSpeechRecognized(text, asr, isFinal);
 
-                        } else if (asr.equalsIgnoreCase("yes")) {
+                        } else if (asr.equalsIgnoreCase(mSpeechService.getString(R.string.yes))) {
 
                             stopCounter();
                             listener.onSpeechRecognized(text, asr, isFinal);

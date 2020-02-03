@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">speechtotext</string>
+    <string name="audio_format_value">wav</string>
+    <string name="encoding_value">pcm16</string>
+    <string name="sad_value">yes</string>
+    <string name="stt_api_value">asr.gnani.ai</string>
+    <string name="gnani">gnani</string>
+    <string name="yes">yes</string>
+    <string name="token_key">token</string>
+    <string name="lang_key">lang</string>
+    <string name="access_key_key">accesskey</string>
+    <string name="audio_format_key">audioformat</string>
+    <string name="encoding_key">encoding</string>
+    <string name="silence_key">silence</string>
 </resources>

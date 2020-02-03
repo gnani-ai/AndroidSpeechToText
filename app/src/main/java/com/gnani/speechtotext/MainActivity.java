@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements SpeechService.Lis
             @Override
             public void onClick(View view) {
 
-                Recorder.onRecord("hin_IN");
+                Recorder.onRecord(getString(R.string.lang_value));
             }
         });
     }

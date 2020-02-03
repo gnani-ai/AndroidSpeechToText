@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SpeechtoText</string>
+    <string name="lang_value">hin_IN</string>
 </resources>

@@ -90,17 +90,17 @@ public class SpeechService extends Service {
     private void fetchAccessToken(String tokenValue, String langValue, String akeyValue, String audioFormatValue, String encodingValue, String sadValue, String ipValue, int portValue, boolean tls) {
         try {
             Metadata header = new Metadata();
-            Metadata.Key<String> token = Metadata.Key.of("token", Metadata.ASCII_STRING_MARSHALLER);
+            Metadata.Key<String> token = Metadata.Key.of(getString(R.string.token_key), Metadata.ASCII_STRING_MARSHALLER);
             header.put(token, tokenValue);
-            Metadata.Key<String> lang = Metadata.Key.of("lang", Metadata.ASCII_STRING_MARSHALLER);
+            Metadata.Key<String> lang = Metadata.Key.of(getString(R.string.lang_key), Metadata.ASCII_STRING_MARSHALLER);
             header.put(lang, langValue);
-            Metadata.Key<String> akey = Metadata.Key.of("accesskey", Metadata.ASCII_STRING_MARSHALLER);
+            Metadata.Key<String> akey = Metadata.Key.of(getString(R.string.access_key_key), Metadata.ASCII_STRING_MARSHALLER);
             header.put(akey, akeyValue);
-            Metadata.Key<String> audioformat = Metadata.Key.of("audioformat", Metadata.ASCII_STRING_MARSHALLER);
+            Metadata.Key<String> audioformat = Metadata.Key.of(getString(R.string.audio_format_key), Metadata.ASCII_STRING_MARSHALLER);
             header.put(audioformat, audioFormatValue);
-            Metadata.Key<String> encoding = Metadata.Key.of("encoding", Metadata.ASCII_STRING_MARSHALLER);
+            Metadata.Key<String> encoding = Metadata.Key.of(getString(R.string.encoding_key), Metadata.ASCII_STRING_MARSHALLER);
             header.put(encoding, encodingValue);
-            Metadata.Key<String> sad = Metadata.Key.of("silence", Metadata.ASCII_STRING_MARSHALLER);
+            Metadata.Key<String> sad = Metadata.Key.of(getString(R.string.silence_key), Metadata.ASCII_STRING_MARSHALLER);
             header.put(sad, sadValue);
 
             if (tls) {
@@ -113,8 +113,12 @@ public class SpeechService extends Service {
         } catch (Exception e) {
 
             for (Listener listener : mListeners) {
-                listener.onSpeechRecognized(null, null, false);
+                listener.onError(e);
             }
+
+//            for (Listener listener : mListeners) {
+//                listener.onSpeechRecognized(null, null, false);
+//            }
         }
     }
 
