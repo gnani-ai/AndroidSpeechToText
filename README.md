@@ -10,7 +10,7 @@
 1) Add a new android resource xml directory inside res directory
 2) Add a new xml resource file inside xml directory and name it as "network_security_config.xml"
 3) Copy and paste the following code in "network_security_config.xml"
-
+```xml
 <network-security-config>
     <domain-config cleartextTrafficPermitted="false">
         <domain includeSubdomains="true">gnani.ai</domain>
@@ -19,6 +19,7 @@
         </trust-anchors>
     </domain-config>
 </network-security-config>
+```
 
 # Enable TLS in Manifest :
 1) Copy and paste the following code in application tag inside "AndroidManifest.xml"
@@ -28,8 +29,10 @@ android:networkSecurityConfig="@xml/network_security_config"
 # Permissions :
 1) Copy and paste the following code above application tag inside "AndroidManifest.xml"
 
+```xml
 <uses-permission android:name="android.permission.INTERNET"/>
 <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+```
 
 2) Write your own code to ask these permissions at runtime
 
@@ -50,7 +53,9 @@ implementation 'com.github.gnani-ai:SpeechToText:1.0.5'
  # Service Declaration :
 1) Add the following code in application tag inside "AndroidManifest.xml"
 
+```xml
 <service android:name="com.gnani.speechtotext.SpeechService"/>
+```
 
 # Java code :
 1) Implement these two intefaces to your activity or fragment or service
