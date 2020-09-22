@@ -50,11 +50,13 @@ public class SpeechService extends Service {
 
             String transcript = response.getTranscript();
             String asr = response.getAsr();
+            boolean isfinal=response.getIsFinal();
+            //boolean isfinal=response.g
 
             if (transcript != null) {
                 for (Listener listener : mListeners) {
 
-                    listener.onSpeechRecognized(transcript, asr, true);
+                    listener.onSpeechRecognized(transcript, asr, isfinal);
 
                 }
             }
