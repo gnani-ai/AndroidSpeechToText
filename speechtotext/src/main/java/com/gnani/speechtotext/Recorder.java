@@ -4,11 +4,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 
@@ -28,6 +30,7 @@ public class Recorder {
     private static CountDownTimer countDownTimer;
     private static String TOKEN = null;
     private static String ACCESS_KEY = null;
+    private static String UID = null;
 
     public static void bind(Context context) {
 
@@ -48,12 +51,26 @@ public class Recorder {
     public static void onRecord(String lang) {
 
         if (!mStartRecording) {
-            mSpeechService.startRecognizing(TOKEN, lang, ACCESS_KEY, mSpeechService.getString(R.string.audio_format_value), mSpeechService.getString(R.string.encoding_value), mSpeechService.getString(R.string.sad_value), mSpeechService.getString(R.string.stt_api_value), mSpeechService.getResources().getInteger(R.integer.stt_api_port_value), mSpeechService.getResources().getBoolean(R.bool.tls_value));
+            mSpeechService.startRecognizing(UID,TOKEN, lang, ACCESS_KEY, mSpeechService.getString(R.string.audio_format_value), mSpeechService.getString(R.string.encoding_value), mSpeechService.getString(R.string.sad_value), mSpeechService.getString(R.string.stt_api_value), mSpeechService.getResources().getInteger(R.integer.stt_api_port_value), mSpeechService.getResources().getBoolean(R.bool.tls_value));
             startRecording();
 
         } else {
             stopCounter();
         }
+    }
+
+
+
+    public static void setDefaults(String key, String value, Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public static String getDefaults(String key, Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString(key, null);
     }
 
     private static void startRecording() {
@@ -202,10 +219,11 @@ public class Recorder {
         stopRecording();
     }
 
-    public static void init(String token, String accessKey) {
+    public static void init(String token, String accessKey,String uid) {
 
         TOKEN = token;
         ACCESS_KEY = accessKey;
+        UID=uid;
 
     }
 

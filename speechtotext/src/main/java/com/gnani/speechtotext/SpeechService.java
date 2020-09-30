@@ -14,6 +14,7 @@ import com.gnani.speech.TranscriptChunk;
 import com.google.protobuf.ByteString;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import io.grpc.ManagedChannel;
@@ -89,7 +90,7 @@ public class SpeechService extends Service {
         super.onCreate();
     }
 
-    private void fetchAccessToken(String tokenValue, String langValue, String akeyValue, String audioFormatValue, String encodingValue, String sadValue, String ipValue, int portValue, boolean tls) {
+    private void fetchAccessToken(String uidvalue,String tokenValue, String langValue, String akeyValue, String audioFormatValue, String encodingValue, String sadValue, String ipValue, int portValue, boolean tls) {
         try {
             Metadata header = new Metadata();
             Metadata.Key<String> token = Metadata.Key.of(getString(R.string.token_key), Metadata.ASCII_STRING_MARSHALLER);
@@ -104,6 +105,28 @@ public class SpeechService extends Service {
             header.put(encoding, encodingValue);
             Metadata.Key<String> sad = Metadata.Key.of(getString(R.string.silence_key), Metadata.ASCII_STRING_MARSHALLER);
             header.put(sad, sadValue);
+            try {
+
+                if (uidvalue == null || uidvalue.equals("")) {
+
+                    String answer = Recorder.getDefaults("user", getApplicationContext());
+                    if (answer == null) {
+                        UUID uuid = UUID.randomUUID();
+                        Recorder.setDefaults("user", uuid.toString(), getApplicationContext());
+                    } else {
+                        uidvalue = answer;
+
+                    }
+
+
+                }
+
+                Metadata.Key<String> uid = Metadata.Key.of("uid", Metadata.ASCII_STRING_MARSHALLER);
+                header.put(uid, uidvalue);
+            }catch (Exception e){
+
+                System.out.println("issue in new key");
+            }
 
             if (tls) {
                 channelG = ManagedChannelBuilder.forAddress(ipValue, portValue).build();
@@ -157,9 +180,9 @@ public class SpeechService extends Service {
     /**
      * Starts recognizing speech audio.
      */
-    public void startRecognizing(String token, String lang, String akey, String audioFormat, String encoding, String sad, String ip, int port, boolean tls) {
+    public void startRecognizing(String uid,String token, String lang, String akey, String audioFormat, String encoding, String sad, String ip, int port, boolean tls) {
 
-        fetchAccessToken(token, lang, akey, audioFormat, encoding, sad, ip, port, tls);
+        fetchAccessToken(uid,token, lang, akey, audioFormat, encoding, sad, ip, port, tls);
         if (mApiG != null) {
 
             mRequestObserverG = mApiG.doSpeechToText(mResponseObserverG);
